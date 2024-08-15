@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" title="let's talk nix!"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>reveal.js</title>
+
+  <link rel="stylesheet" href="dist/reset.css">
+  <link rel="stylesheet" href="dist/reveal.css">
+  <link rel="stylesheet" href="dist/theme/solarized.css">
+
+  <!-- Theme used for syntax highlighted code -->
+  <link rel="stylesheet" href="plugin/highlight/monokai.css">
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <!-- Slide 1 -->
+      <section>
+        <h1>Nix: Reproducible Builds and Environments</h1>
+        <h3>Say Goodbye to "But It Works on My Machine!"</h3>
+      </section>
+
+      <!-- Slide 2 -->
+      <section>
+        <h2>Getting this out of the way...</h2>
+        <p><strong>Nix is weird</strong></p>
+        <p align="center">
+          <img src="./images/nix-trinity.png" alt="Nix Trinity">
+        </p>
+      </section>
+
+      <!-- Slide 3 -->
+      <section>
+        <h3>Reproducibility</h3>
+        <ul>
+          <li class="fragment">Immutable and Declarative Configuration</li>
+          <li class="fragment">Environment Pinning and Locking</li>
+        </ul>
+      </section>
+
+      <!-- Slide 4 -->
+      <section>
+        <h3>Rollback In Case Of Failure</h3>
+        <p align="center">
+          <img src="./images/rollback.png" alt="choose previous generations from boot">
+        </p>
+      </section>
+
+      <!-- Slide 5 -->
+      <section>
+        <h2>Isolation</h2>
+        <ul>
+          <li class="fragment">Dependency Management</li>
+          <li class="fragment">Sandboxed Builds</li>
+        </ul>
+      </section>
+
+      <!-- Slide 6 -->
+      <section>
+        <h2>Flexibility and Scalability</h2>
+        <ul>
+          <li class="fragment">Cross-Platform Capabilities</li>
+          <li class="fragment">Nix Flakes for Modern Package Management</li>
+        </ul>
+      </section>
+
+      <!-- Slide 7 -->
+      <section>
+        <h2>Integration with Docker</h2>
+        <ul>
+          <li class="fragment">Reproducible Docker Images</li>
+          <li class="fragment">Layer Optimization</li>
+        </ul>
+      </section>
+
+      <!-- Slide 8 -->
+      <section>
+        <h2>Community and Ecosystem</h2>
+        <ul>
+          <li class="fragment">Rich Package Repository (100,000+)</li>
+          <li class="fragment">Active and Supportive Community</li>
+        </ul>
+      </section>
+
+      <!-- Slide 9 -->
+      <section>
+        <h2>Practical Example 1</h2>
+        <ul>
+          <li class="fragment">This environment's flake.nix</li>
+        </ul>
+
+        <!-- make a foldable codesection -->
+          <pre><code class="nix" data-line-numbers="-|4|5-8|10|12-15|16-19|22-32">
+# ./flake.nix
+{
+  description = "Simple tex-env with pre-commit";
+
+  inputs = { 
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"; 
+  };
+
+  outputs = { self, nixpkgs }:
+    let
+      forAllSystems = function:
+        nixpkgs.lib.genAttrs [ "x86_64-linux" ]
+          (system: function nixpkgs.legacyPackages.${system});
+
+      generalPackages = pkgs: with pkgs; [
+        reveal-md
+        marksman
+      ];
+
+    in 
+    {
+      devShells = forAllSystems (pkgs: {
+        default = pkgs.mkShell {
+          packages = (generalPackages pkgs);
+
+          shellHook = ''
+          echo "Welcome to the ❄️nix❄️ shell!"
+          '';
+        };
+      });
+    };
+}
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>References</h2>
+        <ul>
+          <li>The documentation: <a href="https://nixos.org/" target="_blank">https://nixos.org/</a></li>
+          <li>Learn Nix, NixOS, and Flakes in an well written online book here: <a href="https://nixos-and-flakes.thiscute.world/" target="_blank">https://nixos-and-flakes.thiscute.world/</a></li>
+          <li>Beautiful slides with revealjs <href>https://revealjs.com</href> </li>
+        </ul>
+      </section>
+
+      
+    </div>
+  </div>
+
+  <script src="dist/reveal.js"></script>
+  <script src="plugin/notes/notes.js"></script>
+  <script src="plugin/markdown/markdown.js"></script>
+  <script src="plugin/highlight/highlight.js"></script>
+  <script>
+    // More info about initialization & config:
+    // - https://revealjs.com/initialization/
+    // - https://revealjs.com/config/
+    Reveal.initialize({
+      hash: true,
+      <!-- transition: 'fade', -->
+      width: '100%',
+      height: '100%',
+      <!-- margin: 0, -->
+      minScale: 1,
+      maxScale: 1,
+      plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+    });
+    Reveal.on('slidechanged', (event) => {
+        // event.previousSlide, event.currentSlide, event.indexh, event.indexv
+    });
+  </script>
+  <style>
+    /* Custom styles to manage code block collapse */
+    .code-collapse {
+      max-height: 400px;
+      overflow-y: auto;
+      transition: max-height 0.5s ease-out;
+    }
+
+    .collapsed {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-out;
+    }
+  </style>
+</body>
+
+</html>
