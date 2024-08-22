@@ -47,7 +47,7 @@
       <section>
         <h3>Reproducibility: NixOS Configuration Example</h3>
         <pre>
-          <code class="nix" data-line-numbers=""># configuration.nix
+          <code class="nix" data-noescape># configuration.nix
             # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
@@ -331,8 +331,8 @@
       </section>
       <section>
         <h2>Docker Example:</h2>
-        <pre><code class="nix" data-line-numbers=""># hello-docker.nix
-
+        <pre>
+          <code class="nix" data-trim data-noescape># hello-docker.nix
 { pkgs ? import <nixpkgs> { }
 , pkgsLinux ? import <nixpkgs> { system = "x86_64-linux"; }
 }:
@@ -342,25 +342,28 @@ pkgs.dockerTools.buildImage {
   config = {
     Cmd = [ "${pkgsLinux.hello}/bin/hello" ];
   };
-}            
-        </code></pre>
+}    
+          </code>
+        </pre>
       </section>
       <section>
         <h2>Docker Example:</h2>
-        <pre><code class="bash" data-line-numbers="1-2|4-5|7-9|11-13">❯ nix-build hello-docker.nix 
-/nix/store/9ka9lv0ygw3rznd59air8maycvizmgxm-docker-image-hello-docker.tar.gz
+        <pre>
+          <code data-line-numbers="1-2|4-5|7-9|11-13">$ nix-build hello-docker.nix 
+/nix/store/9ka9lv0ygw3rznd59air8maycvizmgxm-docker-image-hello-docker.tar.gz          
 
-❯ ll result 
+$ ll result 
 lrwxrwxrwx - jga 21 Aug 20:29 result -> /nix/store/9ka9lv0ygw3rznd59air8maycvizmgxm-docker-image-hello-docker.tar.gz
 
-❯ docker load < result 
+$ docker load < result 
 71c03a03fc54: Loading layer [==================================================>]  33.47MB/33.47MB
 Loaded image: hello-docker:9ka9lv0ygw3rznd59air8maycvizmgxm
 
-❯ docker images
+$ docker images
 REPOSITORY     TAG                                IMAGE ID       CREATED        SIZE
 hello-docker   9ka9lv0ygw3rznd59air8maycvizmgxm   aeaf82e5927f   54 years ago   32.6MB              
-        </code></pre>
+          </code>
+        </pre>
       </section>
 
       <!-- Slide 8 -->
@@ -368,7 +371,7 @@ hello-docker   9ka9lv0ygw3rznd59air8maycvizmgxm   aeaf82e5927f   54 years ago   
         <h2>Community and Ecosystem</h2>
         <ul>
           <li class="fragment">Rich Package Repository (100,000+)</li>
-          <li class="fragment">Active and Supportive Community</li>
+          <li class="fragment">Active and Increasing Community</li>
         </ul>
       </section>
 
@@ -381,7 +384,7 @@ hello-docker   9ka9lv0ygw3rznd59air8maycvizmgxm   aeaf82e5927f   54 years ago   
 
         <pre><code class="nix" data-line-numbers="-|3|5-7|9-12|13-17|20-21|22|24-36"># ./flake.nix
 {
-  description = "Simple tex-env with pre-commit";
+  description = "Simple nix shell for this slideshow";
 
   inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"; };
 
@@ -429,11 +432,15 @@ hello-docker   9ka9lv0ygw3rznd59air8maycvizmgxm   aeaf82e5927f   54 years ago   
           <li>The documentation: <a href="https://nixos.org/" target="_blank">https://nixos.org/</a></li>
           <li><a href="https://www.youtube.com/watch?v=FJVFXsNzYZQ">Fireship Nix in 100 seconds</a></li>
           <li>Learn Nix, NixOS, and Flakes in a well written online book here: <a href="https://nixos-and-flakes.thiscute.world/" target="_blank">https://nixos-and-flakes.thiscute.world/</a></li>
-          <li>Beautiful slides with revealjs <href>https://revealjs.com</href> </li>
+          <li>Beautiful slides with: <a href="https://revealjs.com">https://revealjs.com</a> </li>
         </ul>
       </section>
 
-      
+      <section>
+        <h2>Extra - Easy to try out</h2>
+        It is super easy to try out packages when you do not want to permanently install with
+        <pre><code>nix-shell -p vscode</code></pre>
+      </section>
     </div>
   </div>
 
